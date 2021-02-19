@@ -94,3 +94,16 @@ mod set_value {
         assert_eq!(matrix.get_value(row_index, column_index), new_value);
     }
 }
+
+mod set_values {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_set_all_values() {
+        let matrix_values = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let new_matrix_values = vec![5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+        let mut matrix = Matrix::new(3, matrix_values);
+        matrix.set_values(new_matrix_values.clone());
+        assert_eq!(matrix.values, new_matrix_values);
+    }
+}
