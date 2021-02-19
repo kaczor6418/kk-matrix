@@ -252,6 +252,7 @@ mod subtract {
 
 mod multiply_by_digit {
     use crate::matrix::matrix::Matrix;
+    use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
 
     #[test]
     fn should_multiply_all_matrix_values_by_given_digit() {
@@ -295,6 +296,7 @@ mod multiply_by_digit {
 
 mod multiply_by_vector {
     use crate::matrix::matrix::Matrix;
+    use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
 
     #[test]
     fn should_multiply_matrix_values_by_vector_values() {
@@ -335,6 +337,7 @@ mod multiply_by_vector {
 
 mod multiply_by_matrix {
     use crate::matrix::matrix::Matrix;
+    use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
 
     #[test]
     fn should_multiply_matrix_with_many_rows_and_columns_if_matrix_rows_count_equal_target_matrix_columns_count(

@@ -89,6 +89,14 @@ impl Matrix {
         return &mut self.values
             [row_index * self.columns_count..row_index * self.columns_count + self.columns_count];
     }
+
+    fn multiply_row_by_column(&self, row: &[f64], column: Vec<f64>) -> f64 {
+        let mut sum = 0.0;
+        for index in 0..row.len() {
+            sum += row[index] * column[index];
+        }
+        return sum;
+    }
 }
 
 mod matrix_clone;

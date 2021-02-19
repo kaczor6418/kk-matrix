@@ -52,8 +52,8 @@ impl AlgebraicOperations for Matrix {
             for column_index in 0..matrix.columns_count {
                 result[row_index * matrix.columns_count + column_index] = self
                     .multiply_row_by_column(
-                        self.get_matrix_row(row_index),
-                        matrix.get_matrix_column(column_index),
+                        self.row(row_index),
+                        matrix.column(column_index),
                     );
             }
         }
