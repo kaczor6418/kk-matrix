@@ -1,5 +1,20 @@
-use std::ops::{IndexMut, Index};
+use std::ops::{IndexMut, Index, Add};
 use crate::matrix::matrix::Matrix;
+use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
+
+impl Add<&Matrix> for Matrix {
+    type Output = Matrix;
+    fn add(self, matrix: &Matrix) -> Matrix {
+        return self.add_matrix(matrix);
+    }
+}
+
+impl Add<&Matrix> for &Matrix {
+    type Output = Matrix;
+    fn add(self, matrix: &Matrix) -> Matrix {
+        return self.add_matrix(matrix);
+    }
+}
 
 impl Index<usize> for Matrix {
     type Output = [f64];

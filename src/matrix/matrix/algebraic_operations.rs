@@ -1,6 +1,6 @@
 use crate::matrix::matrix::Matrix;
 
-trait AlgebraicOperations {
+pub trait AlgebraicOperations {
     fn add_matrix(&self, matrix: &Matrix) -> Matrix;
 }
 

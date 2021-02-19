@@ -175,6 +175,7 @@ mod clone {
 
 mod add {
     use crate::matrix::matrix::Matrix;
+    use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
 
     #[test]
     fn should_add_each_element_of_matrix_a_and_matrix_b() {
