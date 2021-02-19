@@ -146,3 +146,29 @@ mod size {
         assert_eq!(expected_columns_count, columns_count);
     }
 }
+
+mod clone {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_be_able_to_clone_matrix() {
+        let matrix = Matrix::new_zeros_matrix(2, 2);
+        let matrix_clone = matrix.clone();
+        assert_eq!(matrix.values, matrix_clone.values);
+        assert_eq!(matrix.rows_count, matrix_clone.rows_count);
+        assert_eq!(matrix.columns_count, matrix_clone.columns_count);
+    }
+
+    #[test]
+    fn should_not_change_original_if_copy_was_modified() {
+        let matrix = Matrix::new_zeros_matrix(2, 2);
+        let matrix_base_clone = matrix.clone();
+        let mut matrix_changed_clone = matrix.clone();
+        matrix_changed_clone.rows_count = 3;
+        matrix_changed_clone.columns_count = 3;
+        matrix_changed_clone.values = vec![1.0; 9];
+        assert_eq!(matrix.values, matrix_base_clone.values);
+        assert_eq!(matrix.rows_count, matrix_base_clone.rows_count);
+        assert_eq!(matrix.columns_count, matrix_base_clone.columns_count);
+    }
+}
