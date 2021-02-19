@@ -383,6 +383,7 @@ mod multiply_by_matrix {
 
 mod kronecker_product {
     use crate::matrix::matrix::Matrix;
+    use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
 
     #[test]
     fn should_create_a_product_of_size_matrix_a_rows_count_x_matrix_b_rows_count_xx_matrix_a_columns_count_x_matrix_b_columns_count(
