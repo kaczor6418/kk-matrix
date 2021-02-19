@@ -39,6 +39,10 @@ impl Matrix {
         return self.rows_count;
     }
 
+    pub fn size(&self) -> (usize, usize) {
+        return (self.rows_count, self.columns_count);
+    }
+
     pub fn get_value(&self, row_index: usize, column_index: usize) -> f64 {
         return self.values[row_index * self.columns_count + column_index];
     }
