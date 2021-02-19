@@ -1,4 +1,4 @@
-use std::ops::{IndexMut, Index, Add};
+use std::ops::{IndexMut, Index, Add, Sub};
 use crate::matrix::matrix::Matrix;
 use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
 
@@ -13,6 +13,20 @@ impl Add<&Matrix> for &Matrix {
     type Output = Matrix;
     fn add(self, matrix: &Matrix) -> Matrix {
         return self.add_matrix(matrix);
+    }
+}
+
+impl Sub<&Matrix> for Matrix {
+    type Output = Matrix;
+    fn sub(self, matrix: &Matrix) -> Matrix {
+        return self.subtract_matrix(matrix);
+    }
+}
+
+impl Sub<&Matrix> for &Matrix {
+    type Output = Matrix;
+    fn sub(self, matrix: &Matrix) -> Matrix {
+        return self.subtract_matrix(matrix);
     }
 }
 
