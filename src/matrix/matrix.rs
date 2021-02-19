@@ -64,18 +64,28 @@ impl Matrix {
         for column_index in 0..self.columns_count {
             values = values
                 .into_iter()
-                .chain(self.get_matrix_column(column_index).into_iter())
+                .chain(self.column(column_index).into_iter())
                 .collect();
         }
         return Matrix::new(self.rows_count, values);
     }
 
-    fn get_matrix_row(&self, row_index: usize) -> &[f64] {
+    fn column(&self, column_index: usize) -> Vec<f64> {
+        return self
+            .values
+            .iter()
+            .skip(column_index)
+            .step_by(self.columns_count)
+            .copied()
+            .collect();
+    }
+
+    fn row(&self, row_index: usize) -> &[f64] {
         return &self.values
             [row_index * self.columns_count..row_index * self.columns_count + self.columns_count];
     }
 
-    fn get_mutable_matrix_row(&mut self, row_index: usize) -> &mut [f64] {
+    fn mutable_row(&mut self, row_index: usize) -> &mut [f64] {
         return &mut self.values
             [row_index * self.columns_count..row_index * self.columns_count + self.columns_count];
     }
