@@ -107,3 +107,27 @@ mod set_values {
         assert_eq!(matrix.values, new_matrix_values);
     }
 }
+
+mod columns_count {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_create_matrix_with_given_number_of_columns() {
+        let columns_count = 6;
+        let matrix = Matrix::new_zeros_matrix(1, columns_count);
+        assert_eq!(matrix.columns_count(), columns_count);
+    }
+}
+
+mod rows_count {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_create_matrix_with_calculated_number_of_rows() {
+        let columns_count = 2;
+        let matrix_values = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let rows_count = matrix_values.len() / columns_count;
+        let matrix = Matrix::new(columns_count, matrix_values);
+        assert_eq!(matrix.rows_count(), rows_count);
+    }
+}
