@@ -30,7 +30,19 @@ impl Matrix {
         }
         return matrix;
     }
+
+    fn get_matrix_row(&self, row_index: usize) -> &[f64] {
+        return &self.values
+            [row_index * self.columns_count..row_index * self.columns_count + self.columns_count];
+    }
+
+    fn get_mutable_matrix_row(&mut self, row_index: usize) -> &mut [f64] {
+        return &mut self.values
+            [row_index * self.columns_count..row_index * self.columns_count + self.columns_count];
+    }
 }
+
+mod matrix_operators;
 
 #[cfg(test)]
 mod matrix_test;
