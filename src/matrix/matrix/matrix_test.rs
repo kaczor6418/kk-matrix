@@ -131,3 +131,18 @@ mod rows_count {
         assert_eq!(matrix.rows_count(), rows_count);
     }
 }
+
+mod size {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_create_matrix_with_calculated_size() {
+        let expected_columns_count = 2;
+        let expected_rows_count = 3;
+        let matrix_values = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let matrix = Matrix::new(expected_columns_count, matrix_values);
+        let (rows_count, columns_count) = matrix.size();
+        assert_eq!(expected_rows_count, rows_count);
+        assert_eq!(expected_columns_count, columns_count);
+    }
+}
