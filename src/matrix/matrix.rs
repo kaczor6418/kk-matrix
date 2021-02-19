@@ -72,6 +72,7 @@ impl Matrix {
 
 mod matrix_clone;
 mod matrix_operators;
+mod algebraic_operations;
 
 #[cfg(test)]
 mod matrix_test;
