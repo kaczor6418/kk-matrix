@@ -380,3 +380,27 @@ mod multiply_by_matrix {
         assert_eq!(result_matrix.values, expected_result.values);
     }
 }
+
+mod kronecker_product {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_create_a_product_of_size_matrix_a_rows_count_x_matrix_b_rows_count_xx_matrix_a_columns_count_x_matrix_b_columns_count(
+    ) {
+        let matrix_a = Matrix::new(2, vec![2.0, 2.0, 2.0, 2.0]);
+        let matrix_b = Matrix::new(2, vec![2.0, 2.0, 2.0, 2.0]);
+        let expected_values = vec![
+            4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0,
+        ];
+        let result_matrix = matrix_a.kronecker_product(&matrix_b);
+        assert_eq!(result_matrix.values, expected_values);
+        assert_eq!(
+            result_matrix.rows_count,
+            expected_values.len() / (matrix_a.rows_count * matrix_b.rows_count)
+        );
+        assert_eq!(
+            result_matrix.columns_count,
+            expected_values.len() / (matrix_a.columns_count * matrix_b.columns_count)
+        );
+    }
+}
