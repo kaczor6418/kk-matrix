@@ -173,6 +173,21 @@ mod clone {
     }
 }
 
+mod transpose {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_transpose_2_x_3_into_3_x_2_matrix() {
+        let matrix_values = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0];
+        let expected_result = Matrix::new(2, vec![1.0, 4.0, 2.0, 5.0, 3.0, 6.0]);
+        let matrix = Matrix::new(3, matrix_values);
+        let result_matrix = matrix.transpose();
+        assert_eq!(result_matrix.columns_count, expected_result.columns_count);
+        assert_eq!(result_matrix.rows_count, expected_result.rows_count);
+        assert_eq!(result_matrix.values, expected_result.values);
+    }
+}
+
 mod add {
     use crate::matrix::matrix::Matrix;
     use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
