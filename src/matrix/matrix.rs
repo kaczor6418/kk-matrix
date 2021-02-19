@@ -31,6 +31,22 @@ impl Matrix {
         return matrix;
     }
 
+    pub fn get_value(&self, row_index: usize, column_index: usize) -> f64 {
+        return self.values[row_index * self.columns_count + column_index];
+    }
+
+    pub fn set_value(&mut self, row_index: usize, column_index: usize, value: f64) {
+        self.values[row_index * self.columns_count + column_index] = value;
+    }
+
+    pub fn get_values(&self) -> &Vec<f64> {
+        return &self.values;
+    }
+
+    pub fn set_values(&mut self, values: Vec<f64>) {
+        self.values = values;
+    }
+
     fn get_matrix_row(&self, row_index: usize) -> &[f64] {
         return &self.values
             [row_index * self.columns_count..row_index * self.columns_count + self.columns_count];
