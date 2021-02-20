@@ -188,6 +188,44 @@ mod transpose {
     }
 }
 
+mod join_horizontal {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_merge_two_matrix_and_give_matrix_with_same_rows_count_and_sum_of_matrices_columns_count(
+    ) {
+        let matrix_a = Matrix::new(2, vec![1.0, 1.0, 1.0, 1.0]);
+        let matrix_b = Matrix::new(3, vec![2.0, 2.0, 2.0, 2.0, 2.0, 2.0]);
+        let expected_values = vec![1.0, 1.0, 2.0, 2.0, 2.0, 1.0, 1.0, 2.0, 2.0, 2.0];
+        let result_matrix = matrix_a.join_horizontal(&matrix_b);
+        assert_eq!(result_matrix.values, expected_values);
+        assert_eq!(result_matrix.rows_count, matrix_a.rows_count);
+        assert_eq!(
+            result_matrix.columns_count,
+            matrix_a.columns_count + matrix_b.columns_count
+        );
+    }
+}
+
+mod join_vertical {
+    use crate::matrix::matrix::Matrix;
+
+    #[test]
+    fn should_merge_two_matrix_and_give_matrix_with_same_columns_count_and_sum_of_matrices_rows_count(
+    ) {
+        let matrix_a = Matrix::new(2, vec![1.0, 1.0, 1.0, 1.0]);
+        let matrix_b = Matrix::new(2, vec![2.0, 2.0, 2.0, 2.0, 2.0, 2.0]);
+        let expected_values = vec![1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0];
+        let result_matrix = matrix_a.join_vertical(&matrix_b);
+        assert_eq!(result_matrix.values, expected_values);
+        assert_eq!(
+            result_matrix.rows_count,
+            matrix_a.rows_count + matrix_b.rows_count
+        );
+        assert_eq!(result_matrix.columns_count, matrix_a.columns_count);
+    }
+}
+
 mod add {
     use crate::matrix::matrix::Matrix;
     use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
