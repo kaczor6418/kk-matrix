@@ -70,6 +70,27 @@ impl Matrix {
         return Matrix::new(self.rows_count, values);
     }
 
+    pub fn join_horizontal(&self, matrix: &Matrix) -> Matrix {
+        let total_columns_count = self.columns_count + matrix.columns_count;
+        let mut output_matrix = Matrix::new_zeros_matrix(self.rows_count, total_columns_count);
+        for row_index in 0..self.rows_count {
+            for column_index in 0..self.columns_count {
+                output_matrix[row_index][column_index] = self[row_index][column_index];
+            }
+            for column_index in self.columns_count..total_columns_count {
+                output_matrix[row_index][column_index] =
+                    matrix[row_index][column_index - self.columns_count]
+            }
+        }
+        return output_matrix;
+    }
+
+    pub fn join_vertical(&self, matrix: &Matrix) -> Matrix {
+        let mut values = self.values.clone();
+        values.extend(&matrix.values);
+        return Matrix::new(self.columns_count, values);
+    }
+
     fn column(&self, column_index: usize) -> Vec<f64> {
         return self
             .values
