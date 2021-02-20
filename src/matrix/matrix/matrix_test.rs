@@ -426,10 +426,10 @@ mod kronecker_product {
     #[test]
     fn should_create_a_product_of_size_matrix_a_rows_count_x_matrix_b_rows_count_xx_matrix_a_columns_count_x_matrix_b_columns_count(
     ) {
-        let matrix_a = Matrix::new(2, vec![2.0, 2.0, 2.0, 2.0]);
+        let matrix_a = Matrix::new(2, vec![1.0, 2.0, 3.0, 4.0]);
         let matrix_b = Matrix::new(2, vec![2.0, 2.0, 2.0, 2.0]);
         let expected_values = vec![
-            4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0, 4.0,
+            2.0, 2.0, 4.0, 4.0, 2.0, 2.0, 4.0, 4.0, 6.0, 6.0, 8.0, 8.0, 6.0, 6.0, 8.0, 8.0,
         ];
         let result_matrix = matrix_a.kronecker_product(&matrix_b);
         assert_eq!(result_matrix.values, expected_values);
