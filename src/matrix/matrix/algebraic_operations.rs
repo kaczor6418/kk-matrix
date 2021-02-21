@@ -1,4 +1,6 @@
 use crate::matrix::matrix::Matrix;
+use std::sync::{Arc, Mutex};
+use std::thread;
 
 pub trait AlgebraicOperations {
     fn add_matrix(&self, matrix: &Matrix) -> Matrix;
@@ -7,6 +9,7 @@ pub trait AlgebraicOperations {
     fn multiply_by_vector(&self, values: &Vec<f64>) -> Matrix;
     fn multiply_by_matrix(&self, matrix: &Matrix) -> Matrix;
     fn kronecker_product(&self, matrix: &Matrix) -> Matrix;
+    fn parallel_kronecker_product(&self, matrix: &Matrix) -> Matrix;
 }
 
 impl AlgebraicOperations for Matrix {
@@ -80,5 +83,41 @@ impl AlgebraicOperations for Matrix {
             }
         }
         return product;
+    }
+
+    fn parallel_kronecker_product(&self, matrix: &Matrix) -> Matrix {
+        let product_rows = self.rows_count * matrix.rows_count;
+        let product_columns_count = self.columns_count * matrix.columns_count;
+        let product = Arc::new(Mutex::new(Matrix::new_zeros_matrix(
+            product_rows,
+            product_columns_count,
+        )));
+        let mut handles = vec![];
+        for m1_row_index in 0..self.rows_count {
+            let product = Arc::clone(&product);
+            let matrix_a = self.to_owned();
+            let matrix_b = matrix.to_owned();
+            handles.push(
+                thread::spawn(move || {
+                    for m1_column_index in 0..matrix_a.columns_count {
+                        for m2_row_index in 0..matrix_b.rows_count {
+                            for m2_column_index in 0..matrix_b.columns_count {
+                                let product_row_index = m1_row_index * matrix_b.rows_count + m2_row_index;
+                                let product_column_index =
+                                    m1_column_index * matrix_b.columns_count + m2_column_index;
+                                let mut prod = product.lock().unwrap();
+                                (*prod)[product_row_index][product_column_index] = matrix_a[m1_row_index]
+                                    [m1_column_index]
+                                    * matrix_b[m2_row_index][m2_column_index];
+                            }
+                        }
+                    }
+                })
+            );
+        }
+        for handle in handles {
+            handle.join().unwrap();
+        }
+        return product.lock().unwrap().clone();
     }
 }
