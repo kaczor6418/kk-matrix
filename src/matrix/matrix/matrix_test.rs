@@ -1,3 +1,5 @@
+use rand::Rng;
+
 mod creating_matrix {
     use crate::matrix::matrix::Matrix;
 
@@ -422,6 +424,8 @@ mod multiply_by_matrix {
 mod kronecker_product {
     use crate::matrix::matrix::Matrix;
     use crate::matrix::matrix::algebraic_operations::AlgebraicOperations;
+    use std::time::Instant;
+    use crate::matrix::matrix::matrix_test::vector_of_random_values;
 
     #[test]
     fn should_create_a_product_of_size_matrix_a_rows_count_x_matrix_b_rows_count_xx_matrix_a_columns_count_x_matrix_b_columns_count(
@@ -462,4 +466,23 @@ mod kronecker_product {
             expected_values.len() / (matrix_a.columns_count * matrix_b.columns_count)
         );
     }
+
+    #[test]
+    fn performance_test () {
+        let base_matrix = Matrix::new(5, vector_of_random_values(25, -1000.0, 1000.0));
+        let matrices = (0..1000).map(|_|  Matrix::new(10, vector_of_random_values(100, -1000.0, 1000.0)));
+        let start = Instant::now();
+        for matrix in matrices {
+            base_matrix.kronecker_product(&matrix);
+        }
+        let duration = Instant::now().duration_since(start);
+        println!("---------------------------------------------");
+        println!("Total time: {}ms", duration.as_millis());
+        println!("---------------------------------------------");
+    }
+}
+
+fn vector_of_random_values(size: usize, min: f64, max: f64) -> Vec<f64> {
+    let mut rng = rand::thread_rng();
+    return  (0..size).map(|_| rng.gen_range(min, max)).collect();
 }

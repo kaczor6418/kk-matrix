@@ -1,6 +1,6 @@
 use crate::matrix::matrix::Matrix;
 use std::sync::{Arc, Mutex};
-use std::thread;
+use crossbeam::thread;
 
 pub trait AlgebraicOperations {
     fn add_matrix(&self, matrix: &Matrix) -> Matrix;
@@ -86,38 +86,45 @@ impl AlgebraicOperations for Matrix {
     }
 
     fn parallel_kronecker_product(&self, matrix: &Matrix) -> Matrix {
-        let product_rows = self.rows_count * matrix.rows_count;
-        let product_columns_count = self.columns_count * matrix.columns_count;
-        let product = Arc::new(Mutex::new(Matrix::new_zeros_matrix(
-            product_rows,
-            product_columns_count,
-        )));
-        let mut handles = vec![];
-        for m1_row_index in 0..self.rows_count {
-            let product = Arc::clone(&product);
-            let matrix_a = self.to_owned();
-            let matrix_b = matrix.to_owned();
-            handles.push(
-                thread::spawn(move || {
-                    for m1_column_index in 0..matrix_a.columns_count {
-                        for m2_row_index in 0..matrix_b.rows_count {
-                            for m2_column_index in 0..matrix_b.columns_count {
-                                let product_row_index = m1_row_index * matrix_b.rows_count + m2_row_index;
+
+        // Create a new thread scope and make it own the locals
+        thread::scope(move |scope| {
+            let product_rows = self.rows_count * matrix.rows_count;
+            let product_columns_count = self.columns_count * matrix.columns_count;
+            let product = Arc::new(Mutex::new(Matrix::new_zeros_matrix(
+                product_rows,
+                product_columns_count,
+            )));
+
+            let mut handles = vec![];
+            for m1_row_index in 0..self.rows_count {
+                let product = Arc::clone(&product);
+
+                // spawn a new thread inside the scope which owns the data it needs to borrow
+                handles.push(scope.spawn(move |_| {
+                    for m1_column_index in 0..self.columns_count {
+                        for m2_row_index in 0..matrix.rows_count {
+                            for m2_column_index in 0..matrix.columns_count {
+                                let product_row_index =
+                                    m1_row_index * matrix.rows_count + m2_row_index;
                                 let product_column_index =
-                                    m1_column_index * matrix_b.columns_count + m2_column_index;
+                                    m1_column_index * matrix.columns_count + m2_column_index;
                                 let mut prod = product.lock().unwrap();
-                                (*prod)[product_row_index][product_column_index] = matrix_a[m1_row_index]
+                                (*prod)[product_row_index][product_column_index] = self[m1_row_index]
                                     [m1_column_index]
-                                    * matrix_b[m2_row_index][m2_column_index];
+                                    * matrix[m2_row_index][m2_column_index];
                             }
                         }
                     }
-                })
-            );
-        }
-        for handle in handles {
-            handle.join().unwrap();
-        }
-        return product.lock().unwrap().clone();
+                }));
+            }
+            for handle in handles {
+                handle.join().unwrap();
+            }
+
+            // probably need a new local binding here. For... reasons...
+            let product = product.lock().unwrap().clone();
+            product
+        }).unwrap()
     }
 }
